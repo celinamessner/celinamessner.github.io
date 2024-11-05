@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Markdown Guide
-subtitle: Resources to work with Markdown
+title: AI and Mental Health
+subtitle: Development requirements for AI development in the mental health domain.
 categories: markdown
-tags: [guide, markdown]
+tags: [mental health, ai]
 ---
 
 ## Resources
 
-This is a [good guide](https://www.markdownguide.org/basic-syntax/) to learn about the basic markdown syntax.
+The following [paper](https://osf.io/preprints/psyarxiv/cuzvr) elaborates on a blueprint on how to implement LLM in the mental health domain.
