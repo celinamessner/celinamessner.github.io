@@ -1,14 +1,12 @@
 ---
 layout: post
-title: Introduction to Python
-subtitle: Each post also has a subtitle
+title: My name is Celina
+subtitle: This is my first post
 categories: Python
-tags: [Python, intro, certificate]
+tags: [about, pythin]
 ---
 
-## Introduction to Python
+## Who I am
 
-This post is meant to summarize some of the key concepts I have learned in the course *Introduction to Python*
+I am CTO of clare&me.
 
-
-![datacamp certification](/assets/images/banners/datacamp_certificate_dummy.jpg)
