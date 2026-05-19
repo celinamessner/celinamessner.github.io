@@ -1,24 +1,42 @@
 ---
 layout: post
-title: "Tea Making Robot"
-subtitle: "Using UML diagrams and object oriented programming for the development of a tea making robot"
-date: 2025-04-17
+title: "System Design — Tea Making Robot"
+subtitle: "Object-oriented system implementation for a humanoid tea-making robot"
+date: 2025-04-14
 author: "Celina Messner"
-categories: [python, uml, oop]
-tags: [oop, python, uml]
+categories: [python, uml, oop, system-design]
+tags: [oop, python, uml, system-design, robotics]
 ---
 
-### 🤖 Tea Making Robot
+### 🤖 System Implementation
 
-This Python program models a tea-making robot using object-oriented design. The system is split into four cooperating classes — `WaterBoiler`, `TeaDispenser`, `OrderQueue`, and `Tea_Maker` — orchestrated by a top-level `Robot` controller. Orders are processed in FIFO order, and each tea type is brewed at its own ideal temperature.
+The tea making robot application is a Python-based project designed to simulate the process of taking tea orders, preparing, and dispensing tea. The application uses Object-Oriented Programming (OOP) principles to represent various components such as the water boiler, tea dispenser, and order queue. In OOP, classes allow a clear modular set-up, which structures the program with clear, modular, and reusable code components that interact to perform the desired task of making tea (Klump, 2001). The classes encapsulate the logic of different components (e.g., the water boiler, tea dispenser, order queue) into distinct objects.
 
-**Concepts demonstrated:** class composition, FIFO queue, dictionaries for configuration, single-responsibility classes.
+### Application functionality
 
-#### Code
+The tea making robot supports the following operations:
+
+**Taking orders**
+
+- The robot receives tea orders.
+- The robot checks if the tea is available and adds it to the order queue.
+
+**Processing orders**
+
+- The robot heats the water to the ideal temperature based on the type of tea.
+- It dispenses the tea and updates the stock after dispensing.
+
+**Exiting the program**
+
+- The user can exit the program by typing `exit`.
+
+### Code Walkthrough
+
+#### Tea Stock & Temperatures
+
+Tea stock and temperatures are stored as dictionaries, which get updated as the system runs. The available quantity of each type of tea is recorded in `tea_stock`. The ideal temperature for each type of tea is defined in `tea_temperatures`.
 
 ```python
-# Tea Stock (tea stock and temperature settings)
-
 # Ideal temperatures for each type of tea
 tea_temperatures = {
     "Mint": 90,
@@ -34,7 +52,13 @@ tea_stock = {
     "Black": 8,
     "Chamomile": 0
 }
+```
 
+#### WaterBoiler class
+
+The `WaterBoiler` class is responsible for heating water to the desired temperature for each tea type. It uses the `heat_to()` method to set the water to the correct temperature, based on the tea order.
+
+```python
 class WaterBoiler:
     def __init__(self):
         self.temperature = 25       # starting temp
@@ -42,24 +66,34 @@ class WaterBoiler:
     def heat_to(self, target_temp):
         self.temperature = target_temp
         print(f"Heating water to {self.temperature}°...")
+```
 
-# Tea dispenser
+#### TeaDispenser class
+
+The `TeaDispenser` class is responsible for checking whether the desired tea type is in stock and dispensing it. The `check_availability()` method checks whether there are any servings left in stock for the requested tea type, while the `dispense()` method updates the stock after dispensing a tea.
+
+```python
 class TeaDispenser:
     def __init__(self):
         self.available = tea_stock        # start with initial stock
 
-    def check_availability(self, tea_type):     # check if the tea is available
+    def check_availability(self, tea_type):
         return self.available.get(tea_type, 0) > 0
 
-    def dispense(self, tea_type):       # dispense the tea and update the stock
+    def dispense(self, tea_type):
         if self.check_availability(tea_type):
             print(f"Dispensing {tea_type} tea...")
             self.available[tea_type] -= 1
             print(f"Stock left: {self.available[tea_type]}")
         else:
             print(f"{tea_type} tea is not available!")
+```
 
-# Order queue (FIFO)
+#### OrderQueue class
+
+The `OrderQueue` class manages tea orders in FIFO (First In, First Out) order. It adds a new tea order to the queue and retrieves and removes the first order from the queue to be processed. If the queue is empty, it returns `None`. It also reports whether there are any orders pending.
+
+```python
 class OrderQueue:
     def __init__(self):
         self.queue = []
@@ -70,13 +104,18 @@ class OrderQueue:
 
     def get_next_order(self):
         if self.queue:
-            return self.queue.pop(0)        # FIFO: Remove and return the first item in the list
+            return self.queue.pop(0)        # FIFO
         return None
 
     def has_orders(self):
         return len(self.queue) > 0
+```
 
-# Tea maker (combines boiler and dispenser)
+#### Tea_Maker class
+
+The `Tea_Maker` class combines the water boiler and the tea dispenser. The `prepare_tea()` method first checks if the requested tea is in stock. If it is, the robot heats the water to the correct temperature and dispenses the tea.
+
+```python
 class Tea_Maker:
     def __init__(self, boiler, dispenser):
         self.boiler = boiler
@@ -88,19 +127,20 @@ class Tea_Maker:
             print("Error: Tea not available!")
             return False
 
-        # Get the temperature for the respective tea
         desired_temp = tea_temperatures[tea_type]
-
-        # Set the water temperature based on the tea type
         print(f"Heating water to the right temperature for {tea_type}...")
         self.boiler.heat_to(desired_temp)
 
         self.dispenser.dispense(tea_type)
         print(f"Tea prepared successfully at {desired_temp}°C!")
         return True
+```
 
+#### Robot class
 
-# Robot controller
+The `Robot` class is the controller for the tea-making process. It manages the order queue, takes orders, and processes them by interacting with the `Tea_Maker`, `TeaDispenser`, and `WaterBoiler`.
+
+```python
 class Robot:
     def __init__(self):
         self.queue = OrderQueue()
@@ -109,7 +149,7 @@ class Robot:
         self.tea_maker = Tea_Maker(self.boiler, self.dispenser)
 
     def take_order(self, tea_type):
-        if tea_type in tea_temperatures:  # Only allow available teas
+        if tea_type in tea_temperatures:
             self.queue.add_order(tea_type)
         else:
             print("Sorry, we don't have that tea.")
@@ -123,35 +163,53 @@ class Robot:
                 print("Order failed.\n")
             else:
                 print("Order complete.\n")
-
-            # After an order is processed, prompt for new orders
             print("Ready for the next order!")
+```
 
-# Tea Making Flow
+#### Main loop for program interaction
+
+The `main()` function prompts the user to enter the type of tea they want to order (e.g. *Green*, *Black*). Once the order is added, the system informs the user that the order has been successfully placed, and processes any pending orders in the queue.
+
+```python
 def main():
     robot = Robot()
-
     print("Welcome to the Tea Making Robot!")
     print("Type in your tea order (e.g. 'Green', 'Black').")
     print("Type 'exit' to stop ordering.")
 
-    # Loop the program to allow continuous orders
     while True:
-        # Get user input for the tea order
         tea_order = input("Enter your tea order: ").strip()
-
         if tea_order.lower() == "exit":
             print("Exiting the Tea Making robot.")
             break
         else:
             robot.take_order(tea_order)
-
-        # Process the orders
         robot.process_orders()
 
-# Run the tea robot
 main()
 ```
+
+### Testing
+
+The following test cases were executed in order:
+
+1. Order black tea — boil water to the right temperature.
+2. Order black tea again — validate that the stock decreased.
+3. Order chamomile tea — expect an "out of stock" error, because stock is 0.
+
+The expected outcome is that all orders should execute correctly, or the flow should break gracefully where there is no stock.
+
+#### Results
+
+All orders were successfully executed, and the order that had no stock was handled with the expected error path.
+
+### Conclusion
+
+This tea making robot is a simplified demonstration of task execution for a humanoid robot taking tea orders, managing stock, and orchestrating objects to prepare tea.
+
+### References
+
+Klump, R., 2001. *Understanding object-oriented programming concepts.* In 2001 IEEE Power Engineering Society Summer Meeting Conference Proceedings (Vol. 2, pp. 1070–1074).
 
 ## Resources
 
