@@ -5,9 +5,9 @@ title: About
 
 ## About
 
-Hi, my name is Celina. I'm co-founder and CTO of clare&me. clare&me develops clinical AI: Conversational APIs for Behavioral Health.
+Hi, my name is Celina. I was co-founder and CTO of clare&me. clare&me developed clinical AI: Conversational APIs for Behavioral Health.
 I quit my job at Google to dedicate my life to digitzing the mental healthcare industry in order to increase coverage for mental health support.
-clare&me was sold to Hasomed GmbH in September 2025.
+clare&me was sold to Hasomed GmbH in September 2025. Hasomed is market leader for psychotherapeutic practice management software. I am now Head of Product AI at the innovation division of Hasomed, HealthyCloud.
 
 ## What drives me
 
